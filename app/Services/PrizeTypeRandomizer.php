@@ -7,11 +7,19 @@ use App\Exceptions\NoPrizeTypesException;
 
 class PrizeTypeRandomizer
 {
+    /**
+     * @var Prize[]
+     */
     protected array $types = [];
 
-    public function registerType($class)
+    /**
+     * Register some prize type
+     *
+     * @param string $class Prize type class name
+     */
+    public function registerType(string $class)
     {
-        $this->types[] = $class;
+        $this->types[] = app($class);
     }
 
     public function run(): Prize
@@ -20,8 +28,13 @@ class PrizeTypeRandomizer
             throw new NoPrizeTypesException('No prize types were registered.');
         }
 
-        $which = $this->types[array_rand($this->types)];
+        $available = $this->available();
 
-        return new $which;
+        return $this->types[array_rand($available)];
+    }
+
+    protected function available()
+    {
+        return array_filter($this->types, fn(Prize $type) => $type->isAvailable());
     }
 }

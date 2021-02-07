@@ -12,6 +12,13 @@ interface Prize
     public function name(): string;
 
     /**
+     * If prize is available for giving
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool;
+
+    /**
      * Generates a price value
      *
      * @return void
