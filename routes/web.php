@@ -18,8 +18,12 @@ Route::get('/', function () {
     return redirect(RouteServiceProvider::HOME);
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\PrizeController::class, 'dashboard'])
+    ->middleware(['auth'])
+    ->name('dashboard');
+
+Route::post('/get-prize', [\App\Http\Controllers\PrizeController::class, 'getPrize'])
+    ->middleware(['auth'])
+    ->name('get-prize');
 
 require __DIR__.'/auth.php';
