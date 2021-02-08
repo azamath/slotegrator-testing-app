@@ -16,7 +16,7 @@ class PointsPrize extends Model implements Prize
 
     public function name(): string
     {
-        return trans('prize.money');
+        return trans('prize.points');
     }
 
     public function isAvailable(): bool
