@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Services;
+namespace App\Models;
 
 use App\Contracts\Prize;
+use Illuminate\Database\Eloquent\Model;
 
-class MoneyPrize implements Prize
+/**
+ * Class PointsPrize
+ *
+ * @property int amount
+ */
+class PointsPrize extends Model implements Prize
 {
-    protected int $amount;
+    public $timestamps = false;
 
     public function name(): string
     {
@@ -22,16 +28,9 @@ class MoneyPrize implements Prize
     public function generate()
     {
         $this->amount = mt_rand(
-            config('prizes.money.min'),
-            config('prizes.money.max'),
+            config('prizes.points.min'),
+            config('prizes.points.max'),
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getAmount(): int
-    {
-        return $this->amount;
-    }
 }

@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Services;
+namespace App\Models;
 
 use App\Contracts\Prize;
+use Illuminate\Database\Eloquent\Model;
 
-class GoodPrize implements Prize
+/**
+ * Class GoodPrize
+ *
+ * @property string good_item
+ */
+class GoodPrize extends Model implements Prize
 {
-    protected $goodItem;
+    public $timestamps = false;
 
     public function name(): string
     {
@@ -21,14 +27,7 @@ class GoodPrize implements Prize
 
     public function generate()
     {
-        $this->goodItem = 'Some good';
+        $this->good_item = 'Some good';
     }
 
-    /**
-     * @return mixed
-     */
-    public function getItem(): mixed
-    {
-        return $this->goodItem;
-    }
 }
