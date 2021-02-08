@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WithdrawRequest;
 use App\Models\GoodPrize;
 use App\Models\MoneyPrize;
 use App\Models\PointsPrize;
 use App\Models\Winning;
 use App\Services\PrizeTypeRandomizer;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PrizeController extends Controller
 {
@@ -42,6 +43,24 @@ class PrizeController extends Controller
             ->save();
 
         session()->flash('prize', trans('prize.messages.won', ['prize' => $prize->name()]));
+
+        return redirect()->back();
+    }
+
+    public function withdrawMoney(WithdrawRequest $request, MoneyPrize $moneyPrize)
+    {
+        if ($moneyPrize->is_withdrawn) {
+            throw new BadRequestHttpException('The money has already been withdrawn.');
+        }
+
+        try {
+            // todo: bank API request
+            $moneyPrize->is_withdrawn = true;
+            $moneyPrize->save();
+        }
+        catch (\Exception $e) {
+            // say something to user
+        }
 
         return redirect()->back();
     }

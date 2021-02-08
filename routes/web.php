@@ -26,4 +26,9 @@ Route::post('/get-prize', [\App\Http\Controllers\PrizeController::class, 'getPri
     ->middleware(['auth'])
     ->name('get-prize');
 
+Route::model('moneyPrize', \App\Models\MoneyPrize::class);
+Route::post('/withdraw/{moneyPrize}', [\App\Http\Controllers\PrizeController::class, 'withdrawMoney'])
+    ->middleware(['auth'])
+    ->name('withdraw');
+
 require __DIR__.'/auth.php';

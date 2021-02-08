@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Model;
  * Class MoneyPrize
  *
  * @property int amount
+ * @property boolean is_withdrawn
+ * @property-read \App\Models\Winning winning
  */
 class MoneyPrize extends Model implements Prize
 {
     public $timestamps = false;
+
+    protected $casts = [
+        'is_withdrawn' => 'boolean',
+    ];
 
     public function name(): string
     {
@@ -33,4 +39,8 @@ class MoneyPrize extends Model implements Prize
         );
     }
 
+    public function winning()
+    {
+        return $this->morphOne(Winning::class, 'prize');
+    }
 }

@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Winning
  *
+ * @property integer user_id
  * @property-read Model|\App\Contracts\Prize prize
  */
 class Winning extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
 
     public function user()
     {
