@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConvertRequest;
 use App\Http\Requests\WithdrawRequest;
 use App\Models\GoodPrize;
 use App\Models\MoneyPrize;
 use App\Models\PointsPrize;
 use App\Models\Winning;
+use App\Services\PointsConverter;
 use App\Services\PrizeTypeRandomizer;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -57,6 +59,21 @@ class PrizeController extends Controller
             // todo: bank API request
             $moneyPrize->is_withdrawn = true;
             $moneyPrize->save();
+        }
+        catch (\Exception $e) {
+            // say something to user
+        }
+
+        return redirect()->back();
+    }
+
+    public function convertPoints(ConvertRequest $request, PointsPrize $pointsPrize, PointsConverter $converter)
+    {
+        try {
+            $converter
+                ->setUser(auth()->user())
+                ->setPointsPrize($pointsPrize)
+                ->convert();
         }
         catch (\Exception $e) {
             // say something to user

@@ -8,5 +8,6 @@ return [
     'points' => [
         'min' => env('PRIZE_POINTS_MIN', 10),
         'max' => env('PRIZE_POINTS_MAX', 1000),
+        'convert_k' => env('PRIZE_POINTS_CONVERT_K', 10),
     ],
 ];

@@ -7,6 +7,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            <div class="text-lg mb-4">
+                Loyalty: {{ auth()->user()->loyalty }}
+            </div>
+
             @if (session('prize'))
                 <div class="text-green-800 mb-4">
                     {{ session('prize') }}

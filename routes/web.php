@@ -31,4 +31,9 @@ Route::post('/withdraw/{moneyPrize}', [\App\Http\Controllers\PrizeController::cl
     ->middleware(['auth'])
     ->name('withdraw');
 
+Route::model('pointsPrize', \App\Models\PointsPrize::class);
+Route::post('/convert/{pointsPrize}', [\App\Http\Controllers\PrizeController::class, 'convertPoints'])
+    ->middleware(['auth'])
+    ->name('convert');
+
 require __DIR__.'/auth.php';
