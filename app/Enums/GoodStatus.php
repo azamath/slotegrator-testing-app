@@ -11,6 +11,10 @@ use Konekt\Enum\Enum;
  * @method static \App\Enums\GoodStatus REJECTED()
  * @method static \App\Enums\GoodStatus ACCEPTED()
  * @method static \App\Enums\GoodStatus SENT()
+ * @method boolean isNew()
+ * @method boolean isRejected()
+ * @method boolean isAccepted()
+ * @method boolean isSent()
  */
 class GoodStatus extends Enum
 {

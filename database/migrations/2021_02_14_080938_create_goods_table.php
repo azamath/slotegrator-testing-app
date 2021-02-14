@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGoodPrizesTable extends Migration
+class CreateGoodsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateGoodPrizesTable extends Migration
      */
     public function up()
     {
-        Schema::create('good_prizes', function (Blueprint $table) {
+        Schema::create('goods', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('good_id')->index();
-            $table->string('good_name'); // denormalization
-            $table->string('status', 16)->default(\App\Enums\GoodStatus::__DEFAULT)->index();
+            $table->string('name', 128);
+            $table->unsignedInteger('qty')->default(0)->index();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class CreateGoodPrizesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('good_prizes');
+        Schema::dropIfExists('goods');
     }
 }

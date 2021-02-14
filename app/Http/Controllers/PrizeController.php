@@ -12,6 +12,7 @@ use App\Models\Winning;
 use App\Services\PointsConverter;
 use App\Services\PrizeTypeRandomizer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -39,13 +40,17 @@ class PrizeController extends Controller
          * @var \Illuminate\Database\Eloquent\Model|\App\Contracts\Prize $prize
          */
         $prize = $randomizer->run();
-        $prize->generate();
-        $prize->save();
 
-        (new Winning())
-            ->user()->associate(auth()->user())
-            ->prize()->associate($prize)
-            ->save();
+        // for data integrity related to warehouse
+        DB::transaction(function () use ($prize) {
+            $prize->generate();
+            $prize->save();
+
+            (new Winning())
+                ->user()->associate(auth()->user())
+                ->prize()->associate($prize)
+                ->save();
+        });
 
         session()->flash('prize', trans('prize.messages.won', ['prize' => $prize->name()]));
 
@@ -97,8 +102,20 @@ class PrizeController extends Controller
             ],
         ]);
 
+        // dont allow already processed prizes to be changed more than once
+        if (!$goodPrize->status->isNew()) {
+            return redirect()->back();
+        }
+
         $goodPrize->status = $request->input('status');
-        $goodPrize->save();
+
+        // for data integrity related to warehouse
+        DB::transaction(function () use ($goodPrize) {
+            $goodPrize->save();
+            if ($goodPrize->status->isRejected()) {
+                $goodPrize->goodItem->increment('qty');
+            }
+        });
 
         return redirect()->back();
     }

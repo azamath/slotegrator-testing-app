@@ -30,6 +30,10 @@ class PrizeTypeRandomizer
 
         $available = $this->available();
 
+        if (empty($available)) {
+            throw new NoPrizeTypesException('No available prizes left.');
+        }
+
         return $this->types[array_rand($available)];
     }
 
