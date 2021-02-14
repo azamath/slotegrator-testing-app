@@ -64,9 +64,7 @@ class PrizeController extends Controller
         }
 
         try {
-            // todo: bank API request
-            $moneyPrize->is_withdrawn = true;
-            $moneyPrize->save();
+            $moneyPrize->withdraw();
         }
         catch (\Exception $e) {
             // say something to user

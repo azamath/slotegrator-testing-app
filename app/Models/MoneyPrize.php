@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Prize;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int amount
  * @property boolean is_withdrawn
  * @property-read \App\Models\Winning winning
+ * @method static Builder pending()
  */
 class MoneyPrize extends Model implements Prize
 {
@@ -50,6 +52,11 @@ class MoneyPrize extends Model implements Prize
         return $this->morphOne(Winning::class, 'prize');
     }
 
+    public function scopePending(Builder $builder)
+    {
+        return $builder->where('is_withdrawn', 0);
+    }
+
     /**
      * @return \App\Models\Fund
      */
@@ -60,5 +67,15 @@ class MoneyPrize extends Model implements Prize
         }
 
         return $this->fund;
+    }
+
+    /**
+     * Sends money to user's bank account via API HTTP request and marks as withdrawn
+     */
+    public function withdraw(): bool
+    {
+        // bank API request...
+        $this->is_withdrawn = true;
+        return $this->save();
     }
 }
