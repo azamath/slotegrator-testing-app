@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GoodStatus;
 use App\Http\Requests\ConvertRequest;
 use App\Http\Requests\WithdrawRequest;
 use App\Models\GoodPrize;
@@ -10,6 +11,8 @@ use App\Models\PointsPrize;
 use App\Models\Winning;
 use App\Services\PointsConverter;
 use App\Services\PrizeTypeRandomizer;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PrizeController extends Controller
@@ -78,6 +81,24 @@ class PrizeController extends Controller
         catch (\Exception $e) {
             // say something to user
         }
+
+        return redirect()->back();
+    }
+
+    public function goodAction(Request $request, GoodPrize $goodPrize)
+    {
+        $this->validate($request, [
+            'status' => [
+                'required',
+                Rule::in([
+                    GoodStatus::ACCEPTED,
+                    GoodStatus::REJECTED,
+                ]),
+            ],
+        ]);
+
+        $goodPrize->status = $request->input('status');
+        $goodPrize->save();
 
         return redirect()->back();
     }

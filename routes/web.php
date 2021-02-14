@@ -36,4 +36,9 @@ Route::post('/convert/{pointsPrize}', [\App\Http\Controllers\PrizeController::cl
     ->middleware(['auth'])
     ->name('convert');
 
+Route::model('goodPrize', \App\Models\GoodPrize::class);
+Route::post('/good-action/{goodPrize}', [\App\Http\Controllers\PrizeController::class, 'goodAction'])
+    ->middleware(['auth'])
+    ->name('good-action');
+
 require __DIR__.'/auth.php';

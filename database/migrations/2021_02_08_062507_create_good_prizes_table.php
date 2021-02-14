@@ -16,7 +16,7 @@ class CreateGoodPrizesTable extends Migration
         Schema::create('good_prizes', function (Blueprint $table) {
             $table->id();
             $table->string('good_item');
-            $table->boolean('is_sent')->default(0)->index();
+            $table->string('status', 16)->default(\App\Enums\GoodStatus::__DEFAULT)->index();
         });
     }
 
