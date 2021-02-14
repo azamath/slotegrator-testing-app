@@ -14,11 +14,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MoneyPrize extends Model implements Prize
 {
+    /** @var string The name of the fund for getting money */
+    public const FUND_NAME = 'prize';
+
     public $timestamps = false;
 
     protected $casts = [
         'is_withdrawn' => 'boolean',
     ];
+
+    protected ?Fund $fund = null;
 
     public function name(): string
     {
@@ -27,20 +32,33 @@ class MoneyPrize extends Model implements Prize
 
     public function isAvailable(): bool
     {
-        // TODO: Implement isAvailable() method.
-        return true;
+        return $this->getFund()->amount > 0;
     }
 
     public function generate()
     {
         $this->amount = mt_rand(
-            config('prizes.money.min'),
-            config('prizes.money.max'),
+            min($this->getFund()->amount, config('prizes.money.min')),
+            min($this->getFund()->amount, config('prizes.money.max')),
         );
+
+        $this->getFund()->decrement('amount', $this->amount);
     }
 
     public function winning()
     {
         return $this->morphOne(Winning::class, 'prize');
+    }
+
+    /**
+     * @return \App\Models\Fund
+     */
+    protected function getFund(): Fund
+    {
+        if (!$this->fund) {
+            $this->fund = Fund::query()->where('name', self::FUND_NAME)->sole();
+        }
+
+        return $this->fund;
     }
 }

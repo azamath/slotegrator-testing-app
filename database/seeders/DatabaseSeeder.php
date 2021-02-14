@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Fund;
 use App\Models\Good;
+use App\Models\MoneyPrize;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -20,5 +22,10 @@ class DatabaseSeeder extends Seeder
          ]);
 
          Good::factory()->count(3)->create();
+
+         Fund::factory()->create([
+             'name' => MoneyPrize::FUND_NAME,
+             'amount' => 100000,
+         ]);
     }
 }

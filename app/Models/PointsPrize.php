@@ -31,7 +31,6 @@ class PointsPrize extends Model implements Prize
 
     public function isAvailable(): bool
     {
-        // TODO: Implement isAvailable() method.
         return true;
     }
 
